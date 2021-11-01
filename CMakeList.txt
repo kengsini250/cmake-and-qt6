@@ -1,0 +1,55 @@
+cmake_minimum_required (VERSION 3.16)
+project (newDianZu)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+#打开QT的功能
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+#C++17
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+#VS2022
+set(CMAKE_C_COMPILER E:\\Microsoft\ Visual\ Studio\ 2022\\VC\\Tools\\MSVC\\14.30.30705\\bin\\Hostx64\\x64\\cl.exe)
+set(CMAKE_CXX_COMPILER E:\\Microsoft\ Visual\ Studio\ 2022\\VC\\Tools\\MSVC\\14.30.30705\\bin\\Hostx64\\x64\\cl.exe)
+
+#QT6
+set(CMAKE_PREFIX_PATH E:/Qt/6.2.0/msvc2019_64)
+find_package(Qt6 COMPONENTS Gui Core Widgets REQUIRED)#include qt
+
+#翻译功能
+find_package(Qt6LinguistTools REQUIRED)
+qt6_add_lupdate(newDianZu TS_FILES lang/lang_jp.ts)
+set(TS_FILES ${PROJECT_SOURCE_DIR}/lang/lang_jp.ts)
+qt6_add_translation(QM_FILES ${TS_FILES})
+
+#包含各种头文件
+include_directories(${PROJECT_SOURCE_DIR}/opencv410)
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+#包含各种lib文件
+link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(E:/Qt/6.2.0/msvc2019_64/lib)
+
+#包含各种源文件和qrc文件
+set(PROJECT_SOURCES 
+		src/xxx.cpp
+        Resource.qrc
+)
+#包含ui文件
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${PROJECT_SOURCE_DIR}/ui)
+
+#编译
+add_executable(${PROJECT_NAME}  #WIN32
+    ${PROJECT_SOURCES} ${ALL_DLL} ${QM_FILES}
+)
+#链接
+target_link_libraries(${PROJECT_NAME} 
+        Qt6::Gui 
+        Qt6::Core 
+        Qt6::Widgets
+)
+target_link_libraries(${PROJECT_NAME} opencv_world410)
